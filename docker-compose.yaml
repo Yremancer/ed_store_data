@@ -7,18 +7,27 @@ services:
       - "${CLICKHOUSE_PORT:-8123}:8123"
       - "9000:9000"
     volumes:
+      - ./clickhouse/init:/docker-entrypoint-initdb.d
       - clickhouse_data:/var/lib/clickhouse
     environment:
       CLICKHOUSE_DB: ${CLICKHOUSE_DB}
       CLICKHOUSE_USER: ${CLICKHOUSE_USER}
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   generator:
-    build: ./src/generator
+    build: .
     container_name: generator
+    env_file:
+      - .env
     restart: unless-stopped
     depends_on:
-      - clickhouse
+      clickhouse:
+        condition: service_healthy
 
 volumes:
   clickhouse_data:

@@ -2,8 +2,11 @@ import logging
 import signal
 import threading
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("Generator")
+from src.config import get_settings
+from src.logger import setup_logging
+
+logger = logging.getLogger(__name__)
+settings = get_settings()
 
 stop_event = threading.Event()
 
@@ -14,10 +17,13 @@ def stop(signum, _frame):
 
 
 def main():
+    setup_logging(settings.LOG_LEVEL)
+
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
 
     logger.info("started")
+
     while not stop_event.is_set():
         stop_event.wait(5)
     logger.info("stopped")
