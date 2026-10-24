@@ -13,6 +13,7 @@ db_data/
 *.python
 *.dump
 *.sql
+!clickhouse/init/*.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
