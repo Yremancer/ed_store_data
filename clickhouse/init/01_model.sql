@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS ed_store_bd.dim_products
     product_id UInt32,
     name       String,
     category   LowCardinality(String),
+    material_category   LowCardinality(String),
     base_price Decimal(10, 2)
 )
 ENGINE = MergeTree

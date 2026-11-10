@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS ed_store_bd.agg_sales_by_minute
 (
     minute   DateTime,
     category LowCardinality(String),
+    material_category LowCardinality(String),
     city     LowCardinality(String),
     orders   AggregateFunction(uniq, UUID),
     items    SimpleAggregateFunction(sum, UInt64),
@@ -9,7 +10,7 @@ CREATE TABLE IF NOT EXISTS ed_store_bd.agg_sales_by_minute
 )
 ENGINE = AggregatingMergeTree
 PARTITION BY toDate(minute)
-ORDER BY (minute, category, city);
+ORDER BY (minute, category, material_category, city);
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS ed_store_bd.mv_sales_by_minute
 TO ed_store_bd.agg_sales_by_minute
@@ -17,6 +18,7 @@ AS
 SELECT
     toStartOfMinute(f.order_ts)  AS minute,
     p.category                   AS category,
+    p.material_category         AS material_category,
     u.city                       AS city,
     uniqState(f.order_id)        AS orders,
     sum(f.quantity)              AS items,
@@ -25,15 +27,16 @@ FROM ed_store_bd.fact_order_items AS f
 LEFT JOIN ed_store_bd.dim_products AS p ON p.product_id = f.product_id
 LEFT JOIN ed_store_bd.dim_users    AS u ON u.user_id    = f.user_id
 WHERE f.status = 'paid'
-GROUP BY minute, category, city;
+GROUP BY minute, category, material_category, city;
 
 CREATE VIEW IF NOT EXISTS ed_store_bd.v_sales_by_minute AS
 SELECT
     minute,
     category,
+    material_category,
     city,
     uniqMerge(orders) AS orders,
     sum(items)        AS items,
     sum(revenue)      AS revenue
 FROM ed_store_bd.agg_sales_by_minute
-GROUP BY minute, category, city;
+GROUP BY minute, category, material_category, city;
