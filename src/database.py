@@ -1,11 +1,10 @@
 import clickhouse_connect
 from clickhouse_connect.driver import Client
 
-from src.config import get_settings
+from src.config import Settings
 
 
-def create_client() -> Client:
-    settings = get_settings()
+def create_client(settings: Settings) -> Client:
     return clickhouse_connect.get_client(
         host=settings.CLICKHOUSE_HOST,
         port=settings.CLICKHOUSE_PORT,
