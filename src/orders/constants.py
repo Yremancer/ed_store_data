@@ -1,7 +1,10 @@
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 from src.orders.models import PaymentMethod
 from src.users.models import Segment
+
+LOCAL_TIMEZONE = ZoneInfo("Asia/Vladivostok")
 
 BASKET_SIZE_WEIGHTS = {1: 75, 2: 20, 3: 5}
 QUANTITY_WEIGHTS = {1: 95, 2: 5}

@@ -1,6 +1,12 @@
+from typing import Protocol
+
 from clickhouse_connect.driver import Client
 
 from src.orders.models import OrderItem
+
+
+class OrderWriter(Protocol):
+    def add_many(self, items: list[OrderItem]) -> None: ...
 
 
 class OrderRepository:
