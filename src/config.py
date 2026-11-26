@@ -8,7 +8,7 @@ from src.users.constants import CITIES, NAMES
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     CLICKHOUSE_HOST: str
     CLICKHOUSE_PORT: int

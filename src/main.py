@@ -3,7 +3,6 @@ import signal
 import threading
 from random import Random
 
-from src.clock import utc_now
 from src.config import get_settings
 from src.database import create_client
 from src.logger import setup_logging
@@ -12,6 +11,7 @@ from src.orders.service import OrderGenerationService
 from src.products.repository import ProductRepository
 from src.users.generator import generate_users
 from src.users.repository import UserRepository
+from src.utils import utc_now
 
 logger = logging.getLogger(__name__)
 

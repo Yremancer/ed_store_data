@@ -1,0 +1,2 @@
+class AdminCreationError(RuntimeError):
+    pass

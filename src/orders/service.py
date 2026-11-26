@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from random import Random
 
-from src.clock import utc_now
 from src.config import Settings
 from src.orders.demand import demand_factors, expected_orders, sample_order_count
 from src.orders.exceptions import InvalidDemandTimestampError
@@ -14,6 +13,7 @@ from src.orders.models import OrderItem
 from src.orders.repository import OrderWriter
 from src.products.models import Product
 from src.users.models import User
+from src.utils import utc_now
 
 Clock = Callable[[], datetime]
 
